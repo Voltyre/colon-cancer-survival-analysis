@@ -1,0 +1,171 @@
+---
+title: "Survival Analysis of Colon Cancer Adjuvant Therapy Trial"
+author: "Van-Liêm PHAM"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
+                      fig.path = here::here("figures", ""), fig.width = 8, fig.height = 6)
+```
+
+```{r packages}
+library(survival)
+library(survminer)
+library(dplyr)
+library(ggplot2)
+library (here)
+```
+
+```{r data}
+data(colon)
+
+# etype == 2 : événement de décès (etype == 1 = récidive).
+# Sans ce filtre, chaque patient apparaît deux fois — biais majeur.
+df <- colon %>%
+  filter(etype == 2) %>%
+  mutate(
+    rx       = factor(rx, levels = c("Obs", "Lev", "Lev+5FU")),
+    sex      = factor(sex, labels = c("Female", "Male")),
+    obstruct = factor(obstruct, labels = c("No", "Yes")),
+    perfor   = factor(perfor,   labels = c("No", "Yes")),
+    adhere   = factor(adhere,   labels = c("No", "Yes")),
+    differ   = factor(differ,   labels = c("Well", "Moderate", "Poor")),
+    extent   = factor(extent,   labels = c("Submucosa", "Muscle", "Serosa", "Adjacent")),
+    node4    = factor(node4,    labels = c("<=4 nodes", ">4 nodes")),
+    surg     = factor(surg,     labels = c("Short", "Long"))
+  )
+
+dim(df)
+summary(df$rx)
+```
+
+```{r descriptive}
+# Distribution du temps de suivi
+ggplot(df, aes(x = time / 365.25)) +
+  geom_histogram(bins = 30, fill = "#1F3A5F", colour = "white") +
+  labs(x = "Follow-up (years)", y = "Number of patients",
+       title = "Distribution of follow-up time") +
+  theme_minimal()
+
+# Taux d'événement par bras de traitement
+df %>%
+  group_by(rx) %>%
+  summarise(n = n(),
+            deaths = sum(status),
+            event_rate = round(mean(status), 3))
+```
+
+```{r km_overall}
+fit_overall <- survfit(Surv(time, status) ~ 1, data = df)
+ggsurvplot(fit_overall, data = df,
+           conf.int = TRUE,
+           xlab = "Time (days)", ylab = "Overall survival probability",
+           palette = "#1F3A5F",
+           ggtheme = theme_minimal())
+```
+
+```{r km_treatment}
+fit_treatment <- survfit(Surv(time, status) ~ rx, data = df)
+
+ggsurvplot(fit_treatment, data = df,
+           conf.int = TRUE,
+           pval = TRUE,           # p-value du test du log-rank
+           risk.table = TRUE,     # tableau du nombre de sujets à risque
+           xlab = "Time (days)", ylab = "Overall survival probability",
+           legend.title = "Treatment",
+           palette = c("#888888", "#3498DB", "#1F3A5F"),
+           ggtheme = theme_minimal())
+```
+
+```{r logrank_pairwise}
+# Le test global ne dit pas quel bras porte le bénéfice.
+# Contrastes par paire contre le bras observation.
+pairwise_logrank <- function(arm) {
+  sub <- df %>%
+    filter(rx %in% c("Obs", arm)) %>%
+    mutate(rx = droplevels(rx))
+  lr <- survdiff(Surv(time, status) ~ rx, data = sub)
+  p  <- 1 - pchisq(lr$chisq, df = 1)
+  data.frame(comparison = paste(arm, "vs Obs"),
+             chisq = round(lr$chisq, 2),
+             p = format.pval(p, digits = 3, eps = 1e-4))
+}
+
+bind_rows(lapply(c("Lev", "Lev+5FU"), pairwise_logrank))
+```
+
+```{r cox_univariate}
+cox_uni <- coxph(Surv(time, status) ~ rx, data = df)
+summary(cox_uni)
+```
+
+```{r cox_multivariate}
+cox_multi <- coxph(Surv(time, status) ~ rx + age + sex + obstruct +
+                                          perfor + adhere + differ +
+                                          extent + node4 + surg,
+                   data = df)
+summary(cox_multi)
+```
+
+```{r missing_data_check}
+cat("Univariate model   — n =", cox_uni$n,   ", events =", cox_uni$nevent, "\n")
+cat("Multivariate model — n =", cox_multi$n, ", events =", cox_multi$nevent, "\n")
+cat("Rows dropped due to missing covariates:", nrow(df) - cox_multi$n, "\n\n")
+
+# Laisser le code nommer la variable responsable plutôt que de l'affirmer.
+covars    <- all.vars(formula(cox_multi))[-(1:2)]
+na_counts <- colSums(is.na(df[, covars, drop = FALSE]))
+print(na_counts[na_counts > 0])
+```
+
+```{r sensitivity_missing}
+cox_nodiffer <- coxph(Surv(time, status) ~ rx + age + sex + obstruct +
+                        perfor + adhere + extent + node4 + surg,
+                      data = df)
+
+data.frame(
+  model = c("With differ (complete cases)", "Without differ (all patients)"),
+  n     = c(cox_multi$n, cox_nodiffer$n),
+  HR    = round(c(summary(cox_multi)$conf.int["rxLev+5FU", "exp(coef)"],
+                  summary(cox_nodiffer)$conf.int["rxLev+5FU", "exp(coef)"]), 3)
+)
+```
+
+```{r forest_plot}
+ggforest(cox_multi, data = df)
+```
+
+```{r ph_test}
+ph_test <- cox.zph(cox_multi)
+ph_test
+
+ph_global_p <- ph_test$table["GLOBAL", "p"]
+```
+
+```{r ph_plot, fig.height=10}
+ggcoxzph(ph_test)
+```
+
+# Interpretation
+
+After adjusting for established prognostic factors (age, sex, bowel obstruction,
+perforation, tumour differentiation, extent of invasion, nodal involvement, and
+time from surgery; n = `r cox_multi$n`, events = `r cox_multi$nevent`), the
+levamisole + 5-FU combination is associated with a hazard ratio of
+`r round(summary(cox_multi)$conf.int["rxLev+5FU", "exp(coef)"], 2)`
+(95% CI `r round(summary(cox_multi)$conf.int["rxLev+5FU", "lower .95"], 2)`–`r round(summary(cox_multi)$conf.int["rxLev+5FU", "upper .95"], 2)`,
+p = `r format.pval(summary(cox_multi)$coefficients["rxLev+5FU", "Pr(>|z|)"], digits = 3, eps = 1e-4)`)
+compared to observation alone — a `r round(100 * (1 - summary(cox_multi)$conf.int["rxLev+5FU", "exp(coef)"]))`% reduction in the hazard of death,
+against the 33% reduction in overall death rate reported for stage C patients
+in the original trial (Moertel et al., 1990).
+
+`r if (ph_global_p >= 0.05) sprintf("The proportional hazards assumption was not rejected (global test p = %s).", format.pval(ph_global_p, digits = 3, eps = 1e-4)) else sprintf("The proportional hazards assumption was rejected globally (p = %s); see the cox.zph output above for the covariates concerned.", format.pval(ph_global_p, digits = 3, eps = 1e-4))`
+
+```{r session}
+sessionInfo()
+```
