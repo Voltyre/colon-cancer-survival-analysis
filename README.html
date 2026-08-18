@@ -362,7 +362,7 @@ III colon carcinoma.</p>
 analysis in R: data preparation and endpoint definition, non-parametric
 estimation, multivariate regression, assumption diagnostics, and fully
 reproducible reporting under version control.</p>
-<p>📄 📄 <a href="https://voltyre.github.io/colon-cancer-survival-analysis/"><strong>Read
+<p>📄 <a href="https://voltyre.github.io/colon-cancer-survival-analysis/"><strong>Read
 the full analysis report</strong></a></p>
 <hr />
 <div id="objectives" class="section level2">
@@ -376,8 +376,8 @@ or to levamisole as a single agent</p></li>
 prognostic factors</p></li>
 <li><p>Test the proportional hazards assumption formally, and report the
 result rather than assume it</p></li>
-<li><h2 id="produce-a-fully-reproducible-html-report-with-pinned-dependencies">Produce
-a fully reproducible HTML report with pinned dependencies</h2></li>
+<li><p>Produce a fully reproducible HTML report with pinned
+dependencies</p></li>
 </ul>
 </div>
 <div id="study-context" class="section level2">
@@ -584,10 +584,9 @@ followed by pairwise contrasts against observation</p></li>
 <li><p><strong>Cox proportional hazards regression</strong>, univariate
 on treatment then multivariate with adjustment for the covariates
 above</p></li>
-<li><h2 id="schoenfeld-residuals-cox.zph-to-test-proportional-hazards-globally-and-per-covariate-with-graphical-inspection-of-the-scaled-residuals-against-time"><strong>Schoenfeld
-residuals</strong> (<code>cox.zph</code>) to test proportional hazards
-globally and per covariate, with graphical inspection of the scaled
-residuals against time</h2></li>
+<li><p><strong>Schoenfeld residuals</strong> (<code>cox.zph</code>) to
+test proportional hazards globally and per covariate, with graphical
+inspection of the scaled residuals against time</p></li>
 </ul>
 </div>
 <div id="key-results" class="section level2">
@@ -760,15 +759,15 @@ enrolled in the published trial, and the selection rule is not
 documented in the <code>survival</code> package. Comparisons with the
 published effect estimates are therefore indicative, not
 confirmatory.</p></li>
-<li><h2 id="missing-values-in-differ-were-handled-by-complete-case-analysis-with-a-sensitivity-check-not-by-imputation.-under-a-missing-at-random-assumption-multiple-imputation-would-be-the-more-principled-approach-for-survival-data-this-requires-including-the-event-indicator-and-the-nelson-aalen-cumulative-hazard-in-the-imputation-model-failing-which-the-treatment-estimate-is-biased-towards-the-null.-this-was-judged-out-of-scope-here-and-is-stated-rather-than-silently-omitted.">Missing
-values in <code>differ</code> were handled by <strong>complete-case
-analysis with a sensitivity check</strong>, not by imputation. Under a
-missing-at-random assumption, multiple imputation would be the more
-principled approach; for survival data this requires including the event
-indicator and the Nelson-Aalen cumulative hazard in the imputation
-model, failing which the treatment estimate is biased towards the null.
-This was judged out of scope here and is stated rather than silently
-omitted.</h2></li>
+<li></li>
+<li><p>Missing values in <code>differ</code> were handled by
+<strong>complete-case analysis with a sensitivity check</strong>, not by
+imputation. Under a missing-at-random assumption, multiple imputation
+would be the more principled approach; for survival data this requires
+including the event indicator and the Nelson-Aalen cumulative hazard in
+the imputation model, failing which the treatment estimate is biased
+towards the null. This was judged out of scope here and is stated rather
+than silently omitted.</p></li>
 </ul>
 </div>
 <div id="reproducing-the-analysis" class="section level2">
@@ -826,12 +825,11 @@ results.</p>
 </div>
 <div id="author" class="section level2">
 <h2>Author</h2>
+<p>Van-Liêm PHAM</p>
+<p>Engineering student at Polytech Sorbonne (food science and
+biotechnology), with a background in life sciences and an interest in
+quantitative methods applied to health and biological data.</p>
 </div>
-</div>
-<div id="van-liêm-pham-engineering-student-at-polytech-sorbonne-food-science-and-biotechnology-with-a-background-in-life-sciences-and-an-interest-in-quantitative-methods-applied-to-health-and-biological-data." class="section level1">
-<h1>Van-Liêm PHAM Engineering student at Polytech Sorbonne (food science
-and biotechnology), with a background in life sciences and an interest
-in quantitative methods applied to health and biological data.</h1>
 </div>
 
 
