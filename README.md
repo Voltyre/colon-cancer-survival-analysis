@@ -20,7 +20,7 @@ Reproducible survival analysis of the `colon` dataset from the R `survival` pack
 
   
 
-  ## Produce a fully reproducible HTML report with pinned dependencies
+## Produce a fully reproducible HTML report with pinned dependencies
 
 ## Study context
 
