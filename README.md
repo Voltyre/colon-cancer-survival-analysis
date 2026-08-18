@@ -134,7 +134,7 @@ The Cox model assumes that hazard ratios are constant over follow-up. Because th
 
 Schoenfeld residual test (`cox.zph`) — **global p = {{PH_GLOBAL_P}}**.
 
-{{PH_NARRATIVE}}
+{{Global p = 0.000172, Covariates violating PH at alpha = 0.05: obstruct, differ, node4}}
 
 ------------------------------------------------------------------------
 
@@ -169,7 +169,7 @@ Stated explicitly, because they bound what this analysis can support.
 ## Reproducing the analysis
 
 ``` bash
-git clone https://github.com/{{USERNAME}}/colon-cancer-survival-analysis.git
+git clone https://github.com/Voltyre/colon-cancer-survival-analysis.git
 cd colon-cancer-survival-analysis
 ```
 
@@ -207,7 +207,7 @@ The rendered report is written to `docs/` and all figures to `figures/`.
 
 ## Environment
 
-R {{R_VERSION}} · `survival` · `survminer` · `dplyr` · `ggplot2`
+R {{4.6.0}} · `survival` · `survminer` · `dplyr` · `ggplot2`
 
 Dependencies are pinned with `renv`; exact versions are recorded in `renv.lock` and the full `sessionInfo()` is printed at the end of the report. Note that `renv` pins packages but not R itself — the version given above is the one under which these results were produced.
 
