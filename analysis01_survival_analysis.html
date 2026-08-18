@@ -11,7 +11,7 @@
 
 <meta name="author" content="Van-Liêm PHAM" />
 
-<meta name="date" content="2026-08-14" />
+<meta name="date" content="2026-08-18" />
 
 <title>Survival Analysis of Colon Cancer Adjuvant Therapy Trial</title>
 
@@ -1500,7 +1500,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Survival Analysis of Colon Cancer Adjuvant
 Therapy Trial</h1>
 <h4 class="author">Van-Liêm PHAM</h4>
-<h4 class="date">2026-08-14</h4>
+<h4 class="date">2026-08-18</h4>
 
 </div>
 
@@ -1714,7 +1714,68 @@ death rate reported for stage C patients in the original trial (Moertel
 et al., 1990).</p>
 <p>The proportional hazards assumption was rejected globally (p =
 0.000172); see the cox.zph output above for the covariates
-concerned.</p>
+concerned.`</p>
+<pre><code>## === COUNTS AND EVENTS ===</code></pre>
+<pre><code>## Patients (KM analysis): 929</code></pre>
+<pre><code>## Deaths: 452 (48.7%)</code></pre>
+<pre><code>##        rx   n deaths
+## 1     Obs 315    168
+## 2     Lev 310    161
+## 3 Lev+5FU 304    123</code></pre>
+<pre><code>## 
+## Complete cases used by the multivariate model: 441</code></pre>
+<pre><code>## Dropped due to missing covariates: 488</code></pre>
+<pre><code>## Median follow-up: 6.44 years</code></pre>
+<pre><code>## 
+## === LOG-RANK TESTS ===</code></pre>
+<pre><code>## Global 3-arm p = 0.0029</code></pre>
+<pre><code>## Lev vs Obs: p = 0.811
+## Lev+5FU vs Obs: p = 0.00159</code></pre>
+<pre><code>## 
+## === COX MULTIVARIATE: HR (95% CI) AND p ===</code></pre>
+<pre><code>##              term   HR          CI       p
+## 1           rxLev 0.98 [0.78-1.22] 0.85618
+## 2       rxLev+5FU 0.70 [0.55-0.88] 0.00252
+## 3             age 1.01 [1.00-1.02] 0.05734
+## 4         sexMale 1.03 [0.85-1.25] 0.74099
+## 5     obstructYes 1.33 [1.06-1.68] 0.01594
+## 6       perforYes 1.02 [0.60-1.73] 0.94784
+## 7       adhereYes 1.17 [0.90-1.51] 0.23827
+## 8  differModerate 0.92 [0.67-1.28] 0.63683
+## 9      differPoor 1.33 [0.91-1.94] 0.13894
+## 10   extentMuscle 1.29 [0.46-3.64] 0.63375
+## 11   extentSerosa 2.11 [0.78-5.69] 0.14020
+## 12 extentAdjacent 3.04 [1.04-8.85] 0.04129
+## 13  node4&gt;4 nodes 2.55 [2.10-3.10] &lt; 1e-04
+## 14       surgLong 1.27 [1.04-1.56] 0.02203</code></pre>
+<pre><code>## 
+## === PROPORTIONAL HAZARDS (cox.zph) ===</code></pre>
+<pre><code>##            chisq df       p
+## rx        2.4955  2 0.28714
+## age       0.8971  1 0.34355
+## sex       0.3805  1 0.53736
+## obstruct  6.2841  1 0.01218
+## perfor    0.7445  1 0.38821
+## adhere    0.0903  1 0.76383
+## differ   16.8929  2 0.00021
+## extent    7.2006  3 0.06577
+## node4     5.8050  1 0.01598
+## surg      0.0183  1 0.89253
+## GLOBAL   41.0901 14 0.00017</code></pre>
+<pre><code>## 
+## Global p = 0.000172</code></pre>
+<pre><code>## Covariates violating PH at alpha = 0.05: obstruct, differ, node4</code></pre>
+<pre><code>## 
+## === EXTERNAL BENCHMARK ===</code></pre>
+<pre><code>## Adjusted HR: 0.70 -&gt; 30% hazard reduction</code></pre>
+<pre><code>## 
+## === SENSITIVITY ===</code></pre>
+<pre><code>##                           model   n    HR
+## 1  With differ (complete cases) 906 0.695
+## 2 Without differ (all patients) 929 0.701</code></pre>
+<pre><code>## 
+## === ENVIRONMENT ===</code></pre>
+<pre><code>## R version: 4.6.0</code></pre>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 4.6.0 (2026-04-24 ucrt)
 ## Platform: x86_64-w64-mingw32/x64
