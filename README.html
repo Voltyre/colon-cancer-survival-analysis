@@ -362,20 +362,20 @@ III colon carcinoma.</p>
 analysis in R: data preparation and endpoint definition, non-parametric
 estimation, multivariate regression, assumption diagnostics, and fully
 reproducible reporting under version control.</p>
-<p>📄 <strong><a href="%7B%7BREPORT_URL%7D%7D">Read the full analysis
-report</a></strong> — rendered HTML, no installation required.</p>
+<p>📄 📄 <a href="https://voltyre.github.io/colon-cancer-survival-analysis/"><strong>Read
+the full analysis report</strong></a></p>
 <hr />
 <div id="objectives" class="section level2">
 <h2>Objectives</h2>
 <ul>
-<li>Reproduce the survival benefit of levamisole + 5-FU versus
-observation alone</li>
-<li>Determine whether the benefit is attributable to the combination or
-to levamisole as a single agent</li>
-<li>Build a multivariate Cox model adjusting for established prognostic
-factors</li>
-<li>Test the proportional hazards assumption formally, and report the
-result rather than assume it</li>
+<li><p>Reproduce the survival benefit of levamisole + 5-FU versus
+observation alone</p></li>
+<li><p>Determine whether the benefit is attributable to the combination
+or to levamisole as a single agent</p></li>
+<li><p>Build a multivariate Cox model adjusting for established
+prognostic factors</p></li>
+<li><p>Test the proportional hazards assumption formally, and report the
+result rather than assume it</p></li>
 <li><h2 id="produce-a-fully-reproducible-html-report-with-pinned-dependencies">Produce
 a fully reproducible HTML report with pinned dependencies</h2></li>
 </ul>
@@ -469,32 +469,32 @@ before any modelling.</p>
 </tr>
 <tr class="odd">
 <td>Deaths</td>
-<td>{{N_DEATHS}} ({{PCT_DEATHS}}%)</td>
+<td>452(48.7 %)</td>
 </tr>
 <tr class="even">
 <td>Observation arm</td>
-<td>n = {{N_OBS}}, {{D_OBS}} deaths</td>
+<td>n = 315, 168 deaths</td>
 </tr>
 <tr class="odd">
 <td>Levamisole arm</td>
-<td>n = {{N_LEV}}, {{D_LEV}} deaths</td>
+<td>n = 310, 161 deaths</td>
 </tr>
 <tr class="even">
 <td>Levamisole + 5-FU arm</td>
-<td>n = {{N_LEV5FU}}, {{D_LEV5FU}} deaths</td>
+<td>n = 304, 123 deaths</td>
 </tr>
 <tr class="odd">
 <td>Median follow-up</td>
-<td>{{MEDIAN_FU}} years</td>
+<td>6.44 years</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Missing data.</strong> Tumour differentiation
 (<code>differ</code>) contains missing values. The Cox models are fitted
 on complete cases, so the multivariate model uses <strong>n =
-{{N_COMPLETE}}</strong> patients against 929 for the Kaplan-Meier
-analysis. No imputation was performed; this is reported as a limitation
-rather than concealed.</p>
+906</strong> patients against 929 for the Kaplan-Meier analysis. No
+imputation was performed; this is reported as a limitation rather than
+concealed.</p>
 <div id="covariates" class="section level3">
 <h3>Covariates</h3>
 <table>
@@ -577,13 +577,13 @@ model.</p>
 inference, then verifies the assumption on which that inference
 depends.</p>
 <ul>
-<li><strong>Kaplan-Meier estimator</strong> for survival curves, with 95
-% confidence bands and numbers-at-risk tables</li>
-<li><strong>Log-rank test</strong> across the three treatment arms,
-followed by pairwise contrasts against observation</li>
-<li><strong>Cox proportional hazards regression</strong>, univariate on
-treatment then multivariate with adjustment for the covariates
-above</li>
+<li><p><strong>Kaplan-Meier estimator</strong> for survival curves, with
+95 % confidence bands and numbers-at-risk tables</p></li>
+<li><p><strong>Log-rank test</strong> across the three treatment arms,
+followed by pairwise contrasts against observation</p></li>
+<li><p><strong>Cox proportional hazards regression</strong>, univariate
+on treatment then multivariate with adjustment for the covariates
+above</p></li>
 <li><h2 id="schoenfeld-residuals-cox.zph-to-test-proportional-hazards-globally-and-per-covariate-with-graphical-inspection-of-the-scaled-residuals-against-time"><strong>Schoenfeld
 residuals</strong> (<code>cox.zph</code>) to test proportional hazards
 globally and per covariate, with graphical inspection of the scaled
@@ -606,8 +606,7 @@ closely throughout. The benefit of the regimen therefore comes from the
 <strong>combination</strong>, not from levamisole as a single agent — a
 distinction the global test alone cannot make, which is why pairwise
 contrasts are reported below.</p>
-<p>Global three-arm log-rank test: <strong>p =
-{{LOGRANK_P}}</strong>.</p>
+<p>Global three-arm log-rank test: <strong>p = 0.0029 </strong>.</p>
 <table>
 <thead>
 <tr class="header">
@@ -618,11 +617,11 @@ contrasts are reported below.</p>
 <tbody>
 <tr class="odd">
 <td>Lev+5FU vs Obs</td>
-<td>{{P_LEV5FU_OBS}}</td>
+<td>0.00159</td>
 </tr>
 <tr class="even">
 <td>Lev vs Obs</td>
-<td>{{P_LEV_OBS}}</td>
+<td>0.811</td>
 </tr>
 </tbody>
 </table>
@@ -645,20 +644,20 @@ confounding.</p>
 prognostic determinants, with effect sizes exceeding that of treatment
 itself — adjuvant therapy modifies the prognosis conferred by baseline
 stage without overriding it.</p>
-<p><strong>External benchmark.</strong> The adjusted hazard ratio of
-{{HR_LEV5FU}} corresponds to a <strong>{{PCT_REDUCTION}} % reduction in
-the hazard of death</strong>, against the <strong>33 %</strong>
-reduction in overall death rate reported for stage C patients in the
-original publication. The agreement is a check on the analysis pipeline
-rather than a finding in its own right: it indicates that the endpoint
-definition, the record filtering and the model specification behave as
-intended. The two figures are not strictly comparable — the published
-estimate covers stage C patients only, while this dataset is an
-undocumented subset spanning both stage groups.</p>
+<p><strong>External benchmark.</strong> The adjusted hazard ratio of 0.7
+corresponds to a <strong>30 % reduction in the hazard of death</strong>,
+against the <strong>33 %</strong> reduction in overall death rate
+reported for stage C patients in the original publication. The agreement
+is a check on the analysis pipeline rather than a finding in its own
+right: it indicates that the endpoint definition, the record filtering
+and the model specification behave as intended. The two figures are not
+strictly comparable — the published estimate covers stage C patients
+only, while this dataset is an undocumented subset spanning both stage
+groups.</p>
 <p><strong>Sensitivity to listwise deletion.</strong> Refitting the
 model without <code>differ</code>, which retains all 929 patients, gives
-a treatment estimate of {{HR_SENSITIVITY}} against {{HR_LEV5FU}} for the
-complete-case model. {{SENSITIVITY_VERDICT}}</p>
+a treatment estimate of 0.7 against 0.7 for the complete-case model.
+Difference : 0.006</p>
 <table>
 <colgroup>
 <col width="25%" />
@@ -677,27 +676,27 @@ complete-case model. {{SENSITIVITY_VERDICT}}</p>
 <tbody>
 <tr class="odd">
 <td>Lev+5FU vs Obs</td>
-<td>{{HR_LEV5FU}}</td>
-<td>{{CI_LEV5FU}}</td>
-<td>{{P_HR_LEV5FU}}</td>
+<td>0.7</td>
+<td>[ 0.55 - 0.88 ]</td>
+<td>0.00252</td>
 </tr>
 <tr class="even">
 <td>Lev vs Obs</td>
-<td>{{HR_LEV}}</td>
-<td>{{CI_LEV}}</td>
-<td>{{P_HR_LEV}}</td>
+<td>0.98</td>
+<td>[ 0.78 - 1.22 ]</td>
+<td>0.856</td>
 </tr>
 <tr class="odd">
 <td>&gt;4 positive nodes</td>
-<td>{{HR_NODE4}}</td>
-<td>{{CI_NODE4}}</td>
-<td>{{P_NODE4}}</td>
+<td>2.55</td>
+<td>[ 2.1 - 3.1 ]</td>
+<td>&lt;1e-04</td>
 </tr>
 <tr class="even">
 <td>Extent: adjacent structures</td>
-<td>{{HR_EXTENT}}</td>
-<td>{{CI_EXTENT}}</td>
-<td>{{P_EXTENT}}</td>
+<td>3.04</td>
+<td>[ 1.04 - 8.85 ]</td>
+<td>0.0413</td>
 </tr>
 </tbody>
 </table>
@@ -709,8 +708,14 @@ Because the follow-up here spans several years and the treatment effect
 emerges gradually, this assumption is worth testing rather than
 presuming.</p>
 <p>Schoenfeld residual test (<code>cox.zph</code>) — <strong>global p =
-{{PH_GLOBAL_P}}</strong>.</p>
-<p>{{PH_NARRATIVE}}</p>
+0.000172</strong>.</p>
+<p>The assumption was violated for three covariates:
+<code>obstruct</code>, <code>differ</code> and <code>node4</code>. No
+stratified refit was performed; however, the sensitivity analysis
+excluding <code>differ</code> shows a stable treatment estimate, and
+these violations concern prognostic factors rather than the treatment
+variable itself. The treatment effect should nonetheless be interpreted
+with this caveat.</p>
 <hr />
 </div>
 </div>
@@ -730,30 +735,31 @@ regimens rather than immunomodulation.</p>
 <p>Stated explicitly, because they bound what this analysis can
 support.</p>
 <ul>
-<li><code>colon</code> is a canonical teaching dataset. This project
+<li><p><code>colon</code> is a canonical teaching dataset. This project
 demonstrates <strong>methodology</strong>, not novel clinical
-findings.</li>
-<li>The 1990 standard of care has since been superseded by
+findings.</p></li>
+<li><p>The 1990 standard of care has since been superseded by
 oxaliplatin-based regimens (FOLFOX and successors). The effect sizes
 reported here are <strong>not transferable to current
-practice</strong>.</li>
-<li>The Cox models are fitted on <strong>complete cases</strong>.
+practice</strong>.</p></li>
+<li><p>The Cox models are fitted on <strong>complete cases</strong>.
 Missingness in <code>differ</code> is treated as ignorable, which is not
-verified.</li>
-<li><code>age</code> is modelled as linear on the log-hazard scale; no
-spline or fractional polynomial alternative was tested.</li>
-<li>For a <strong>recurrence</strong> endpoint, death without recurrence
-is a competing risk that a standard Cox model does not accommodate.
-Restricting the analysis to overall survival avoids this issue rather
-than solving it.</li>
-<li><strong>No internal validation</strong> was performed — no bootstrap
-optimism correction, no concordance index, no calibration assessment.
-The model is interpreted as inferential, not predictive.</li>
-<li>The dataset holds <strong>929 of the 1 296 patients</strong>
+verified.</p></li>
+<li><p><code>age</code> is modelled as linear on the log-hazard scale;
+no spline or fractional polynomial alternative was tested.</p></li>
+<li><p>For a <strong>recurrence</strong> endpoint, death without
+recurrence is a competing risk that a standard Cox model does not
+accommodate. Restricting the analysis to overall survival avoids this
+issue rather than solving it.</p></li>
+<li><p><strong>No internal validation</strong> was performed — no
+bootstrap optimism correction, no concordance index, no calibration
+assessment. The model is interpreted as inferential, not
+predictive.</p></li>
+<li><p>The dataset holds <strong>929 of the 1 296 patients</strong>
 enrolled in the published trial, and the selection rule is not
 documented in the <code>survival</code> package. Comparisons with the
 published effect estimates are therefore indicative, not
-confirmatory.</li>
+confirmatory.</p></li>
 <li><h2 id="missing-values-in-differ-were-handled-by-complete-case-analysis-with-a-sensitivity-check-not-by-imputation.-under-a-missing-at-random-assumption-multiple-imputation-would-be-the-more-principled-approach-for-survival-data-this-requires-including-the-event-indicator-and-the-nelson-aalen-cumulative-hazard-in-the-imputation-model-failing-which-the-treatment-estimate-is-biased-towards-the-null.-this-was-judged-out-of-scope-here-and-is-stated-rather-than-silently-omitted.">Missing
 values in <code>differ</code> were handled by <strong>complete-case
 analysis with a sensitivity check</strong>, not by imputation. Under a
@@ -767,7 +773,7 @@ omitted.</h2></li>
 </div>
 <div id="reproducing-the-analysis" class="section level2">
 <h2>Reproducing the analysis</h2>
-<pre class="bash"><code>git clone https://github.com/{{USERNAME}}/colon-cancer-survival-analysis.git
+<pre class="bash"><code>git clone https://github.com/Voltyre/colon-cancer-survival-analysis.git
 cd colon-cancer-survival-analysis</code></pre>
 <p>Open <code>colon-survival.Rproj</code> in RStudio, then:</p>
 <pre class="r"><code>renv::restore()   # restore the exact package versions used here
@@ -796,7 +802,7 @@ to <code>figures/</code>.</p>
 </div>
 <div id="environment" class="section level2">
 <h2>Environment</h2>
-<p>R {{R_VERSION}} · <code>survival</code> · <code>survminer</code> ·
+<p>R 4.6.0 · <code>survival</code> · <code>survminer</code> ·
 <code>dplyr</code> · <code>ggplot2</code></p>
 <p>Dependencies are pinned with <code>renv</code>; exact versions are
 recorded in <code>renv.lock</code> and the full
@@ -820,10 +826,12 @@ results.</p>
 </div>
 <div id="author" class="section level2">
 <h2>Author</h2>
-<p>Van-Liêm PHAM Engineering student at Polytech Sorbonne (food science
-and biotechnology), with a background in life sciences and an interest
-in quantitative methods applied to health and biological data.</p>
 </div>
+</div>
+<div id="van-liêm-pham-engineering-student-at-polytech-sorbonne-food-science-and-biotechnology-with-a-background-in-life-sciences-and-an-interest-in-quantitative-methods-applied-to-health-and-biological-data." class="section level1">
+<h1>Van-Liêm PHAM Engineering student at Polytech Sorbonne (food science
+and biotechnology), with a background in life sciences and an interest
+in quantitative methods applied to health and biological data.</h1>
 </div>
 
 
