@@ -18,7 +18,7 @@ Reproducible survival analysis of the `colon` dataset from the R `survival` pack
 
 - Test the proportional hazards assumption formally, and report the result rather than assume it
 
-- 
+  
 
   ## Produce a fully reproducible HTML report with pinned dependencies
 
