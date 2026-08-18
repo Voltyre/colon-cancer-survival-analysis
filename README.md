@@ -4,7 +4,7 @@ Reproducible survival analysis of the `colon` dataset from the R `survival` pack
 
 **Personal project** demonstrating end-to-end survival analysis in R: data preparation and endpoint definition, non-parametric estimation, multivariate regression, assumption diagnostics, and fully reproducible reporting under version control.
 
-📄 📄 [**Read the full analysis report**](https://voltyre.github.io/colon-cancer-survival-analysis/)
+📄 [**Read the full analysis report**](https://voltyre.github.io/colon-cancer-survival-analysis/)
 
 ------------------------------------------------------------------------
 
@@ -18,9 +18,7 @@ Reproducible survival analysis of the `colon` dataset from the R `survival` pack
 
 - Test the proportional hazards assumption formally, and report the result rather than assume it
 
-- 
-
-  ## Produce a fully reproducible HTML report with pinned dependencies
+-  Produce a fully reproducible HTML report with pinned dependencies
 
 ## Study context
 
@@ -90,9 +88,7 @@ The analysis proceeds from non-parametric description to adjusted inference, the
 
 - **Cox proportional hazards regression**, univariate on treatment then multivariate with adjustment for the covariates above
 
-- 
-
-  ## **Schoenfeld residuals** (`cox.zph`) to test proportional hazards globally and per covariate, with graphical inspection of the scaled residuals against time
+- **Schoenfeld residuals** (`cox.zph`) to test proportional hazards globally and per covariate, with graphical inspection of the scaled residuals against time
 
 ## Key results
 
@@ -144,7 +140,7 @@ The analysis reproduces the conclusion of the original trial: adjuvant levamisol
 
 ------------------------------------------------------------------------
 
-## Limitations {#limitations}
+## Limitations
 
 Stated explicitly, because they bound what this analysis can support.
 
@@ -164,7 +160,7 @@ Stated explicitly, because they bound what this analysis can support.
 
 - 
 
-  ## Missing values in `differ` were handled by **complete-case analysis with a sensitivity check**, not by imputation. Under a missing-at-random assumption, multiple imputation would be the more principled approach; for survival data this requires including the event indicator and the Nelson-Aalen cumulative hazard in the imputation model, failing which the treatment estimate is biased towards the null. This was judged out of scope here and is stated rather than silently omitted.
+- Missing values in `differ` were handled by **complete-case analysis with a sensitivity check**, not by imputation. Under a missing-at-random assumption, multiple imputation would be the more principled approach; for survival data this requires including the event indicator and the Nelson-Aalen cumulative hazard in the imputation model, failing which the treatment estimate is biased towards the null. This was judged out of scope here and is stated rather than silently omitted.
 
 ## Reproducing the analysis
 
@@ -223,6 +219,7 @@ Moertel CG, Fleming TR, Macdonald JS, et al. *Fluorouracil plus levamisole as ef
 
 ## Author
 
-Van-Liêm PHAM Engineering student at Polytech Sorbonne (food science and biotechnology), with a background in life sciences and an interest in quantitative methods applied to health and biological data.
-=======
+Van-Liêm PHAM
+
+Engineering student at Polytech Sorbonne (food science and biotechnology), with a background in life sciences and an interest in quantitative methods applied to health and biological data.
 
