@@ -222,5 +222,10 @@ Moertel CG, Fleming TR, Macdonald JS, et al. *Fluorouracil plus levamisole as ef
 ------------------------------------------------------------------------
 
 ## Author
+<<<<<<< HEAD
 
 Van-Liêm PHAM Engineering student at Polytech Sorbonne (food science and biotechnology), with a background in life sciences and an interest in quantitative methods applied to health and biological data.
+=======
+Van-Liêm PHAM
+Engineering student at Polytech Sorbonne (food science and biotechnology), with a background in life sciences and an interest in quantitative methods applied to health and biological data.
+>>>>>>> c1c5fdc8131849cc3bbef34200e0d4b124837fee
