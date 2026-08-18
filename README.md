@@ -4,7 +4,7 @@ Reproducible survival analysis of the `colon` dataset from the R `survival` pack
 
 **Personal project** demonstrating end-to-end survival analysis in R: data preparation and endpoint definition, non-parametric estimation, multivariate regression, assumption diagnostics, and fully reproducible reporting under version control.
 
-📄 [**Read the full analysis report**]({{https://voltyre.github.io/colon-cancer-survival-analysis/}}) — rendered HTML, no installation required.
+📄 📄 [**Read the full analysis report**](https://voltyre.github.io/colon-cancer-survival-analysis/)
 
 ------------------------------------------------------------------------
 
@@ -53,13 +53,13 @@ The data come from **INT-0035**, an intergroup randomised trial run by the North
 |-----------------------|---------------------------------------|
 | Endpoint              | Overall survival (`etype == 2`)       |
 | Patients              | 929                                   |
-| Deaths                | {{N_DEATHS}} ({{PCT_DEATHS}}%)        |
-| Observation arm       | n = {{N_OBS}}, {{D_OBS}} deaths       |
-| Levamisole arm        | n = {{N_LEV}}, {{D_LEV}} deaths       |
-| Levamisole + 5-FU arm | n = {{N_LEV5FU}}, {{D_LEV5FU}} deaths |
-| Median follow-up      | {{MEDIAN_FU}} years                   |
+| Deaths                | 452(48.7 %)         |
+| Observation arm       | n = 315, 168 deaths |
+| Levamisole arm        | n = 310, 161 deaths |
+| Levamisole + 5-FU arm | n = 304, 123 deaths |
+| Median follow-up      | 6.44 years          |
 
-**Missing data.** Tumour differentiation (`differ`) contains missing values. The Cox models are fitted on complete cases, so the multivariate model uses **n = {{N_COMPLETE}}** patients against 929 for the Kaplan-Meier analysis. No imputation was performed; this is reported as a limitation rather than concealed.
+**Missing data.** Tumour differentiation (`differ`) contains missing values. The Cox models are fitted on complete cases, so the multivariate model uses **n = 906** patients against 929 for the Kaplan-Meier analysis. No imputation was performed; this is reported as a limitation rather than concealed.
 
 ### Covariates
 
@@ -102,12 +102,12 @@ The analysis proceeds from non-parametric description to adjusted inference, the
 
 The three curves separate progressively over the first three years of follow-up and remain separated thereafter. Patients receiving levamisole + 5-fluorouracil show a sustained survival advantage over observation alone, while the levamisole-only arm tracks the observation curve closely throughout. The benefit of the regimen therefore comes from the **combination**, not from levamisole as a single agent — a distinction the global test alone cannot make, which is why pairwise contrasts are reported below.
 
-Global three-arm log-rank test: **p = {{LOGRANK_P}}**.
+Global three-arm log-rank test: **p = 0.0029 **.
 
 | Comparison     | Log-rank p       |
 |----------------|------------------|
-| Lev+5FU vs Obs | {{P_LEV5FU_OBS}} |
-| Lev vs Obs     | {{P_LEV_OBS}}    |
+| Lev+5FU vs Obs |   0.00159    |
+| Lev vs Obs     |   0.811      |
 
 ### Multivariate Cox model
 
@@ -117,24 +117,24 @@ After adjustment for age, sex, bowel obstruction, perforation, adherence to adja
 
 Nodal involvement and depth of invasion emerge as the dominant prognostic determinants, with effect sizes exceeding that of treatment itself — adjuvant therapy modifies the prognosis conferred by baseline stage without overriding it.
 
-**External benchmark.** The adjusted hazard ratio of {{HR_LEV5FU}} corresponds to a **{{PCT_REDUCTION}} % reduction in the hazard of death**, against the **33 %** reduction in overall death rate reported for stage C patients in the original publication. The agreement is a check on the analysis pipeline rather than a finding in its own right: it indicates that the endpoint definition, the record filtering and the model specification behave as intended. The two figures are not strictly comparable — the published estimate covers stage C patients only, while this dataset is an undocumented subset spanning both stage groups.
+**External benchmark.** The adjusted hazard ratio of 0.7 corresponds to a **30  % reduction in the hazard of death**, against the **33 %** reduction in overall death rate reported for stage C patients in the original publication. The agreement is a check on the analysis pipeline rather than a finding in its own right: it indicates that the endpoint definition, the record filtering and the model specification behave as intended. The two figures are not strictly comparable — the published estimate covers stage C patients only, while this dataset is an undocumented subset spanning both stage groups.
 
-**Sensitivity to listwise deletion.** Refitting the model without `differ`, which retains all 929 patients, gives a treatment estimate of {{HR_SENSITIVITY}} against {{HR_LEV5FU}} for the complete-case model. {{SENSITIVITY_VERDICT}}
+**Sensitivity to listwise deletion.** Refitting the model without `differ`, which retains all 929 patients, gives a treatment estimate of 0.7 against 0.7  for the complete-case model. Difference : 0.006
 
 | Term                        | HR            | 95 % CI       | p               |
 |------------------|------------------|------------------|------------------|
-| Lev+5FU vs Obs              | {{HR_LEV5FU}} | {{CI_LEV5FU}} | {{P_HR_LEV5FU}} |
-| Lev vs Obs                  | {{HR_LEV}}    | {{CI_LEV}}    | {{P_HR_LEV}}    |
-| \>4 positive nodes          | {{HR_NODE4}}  | {{CI_NODE4}}  | {{P_NODE4}}     |
-| Extent: adjacent structures | {{HR_EXTENT}} | {{CI_EXTENT}} | {{P_EXTENT}}    |
+| Lev+5FU vs Obs              | 0.7   | [ 0.55 - 0.88 ]  | 0.00252          |
+| Lev vs Obs                  | 0.98  | [ 0.78 - 1.22 ]  | 0.856            |
+| \>4 positive nodes          | 2.55  | [ 2.1 - 3.1 ]    | <1e-04           |
+| Extent: adjacent structures | 3.04  | [ 1.04 - 8.85 ]  | 0.0413           |
 
 ### Proportional hazards assumption
 
 The Cox model assumes that hazard ratios are constant over follow-up. Because the follow-up here spans several years and the treatment effect emerges gradually, this assumption is worth testing rather than presuming.
 
-Schoenfeld residual test (`cox.zph`) — **global p = {{PH_GLOBAL_P}}**.
+Schoenfeld residual test (`cox.zph`) — **global p = 0.000172**.
 
-{{Global p = 0.000172, Covariates violating PH at alpha = 0.05: obstruct, differ, node4}}
+The assumption was violated for three covariates: `obstruct`, `differ` and `node4`. No stratified refit was performed; however, the sensitivity analysis excluding `differ` shows a stable treatment estimate, and these violations concern prognostic factors rather than the treatment variable itself. The treatment effect should nonetheless be interpreted with this caveat.
 
 ------------------------------------------------------------------------
 
@@ -207,7 +207,7 @@ The rendered report is written to `docs/` and all figures to `figures/`.
 
 ## Environment
 
-R {{4.6.0}} · `survival` · `survminer` · `dplyr` · `ggplot2`
+R 4.6.0 · `survival` · `survminer` · `dplyr` · `ggplot2`
 
 Dependencies are pinned with `renv`; exact versions are recorded in `renv.lock` and the full `sessionInfo()` is printed at the end of the report. Note that `renv` pins packages but not R itself — the version given above is the one under which these results were produced.
 
@@ -222,10 +222,7 @@ Moertel CG, Fleming TR, Macdonald JS, et al. *Fluorouracil plus levamisole as ef
 ------------------------------------------------------------------------
 
 ## Author
-<<<<<<< HEAD
 
 Van-Liêm PHAM Engineering student at Polytech Sorbonne (food science and biotechnology), with a background in life sciences and an interest in quantitative methods applied to health and biological data.
 =======
-Van-Liêm PHAM
-Engineering student at Polytech Sorbonne (food science and biotechnology), with a background in life sciences and an interest in quantitative methods applied to health and biological data.
->>>>>>> c1c5fdc8131849cc3bbef34200e0d4b124837fee
+
