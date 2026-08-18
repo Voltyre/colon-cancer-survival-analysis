@@ -4,7 +4,7 @@ Reproducible survival analysis of the `colon` dataset from the R `survival` pack
 
 **Personal project** demonstrating end-to-end survival analysis in R: data preparation and endpoint definition, non-parametric estimation, multivariate regression, assumption diagnostics, and fully reproducible reporting under version control.
 
-📄 [**Read the full analysis report**](%7B%7Bhttps://voltyre.github.io/colon-cancer-survival-analysis/%7D%7D) — rendered HTML, no installation required.
+📄 [**Read the full analysis report**]({{https://voltyre.github.io/colon-cancer-survival-analysis/}}) — rendered HTML, no installation required.
 
 ------------------------------------------------------------------------
 
