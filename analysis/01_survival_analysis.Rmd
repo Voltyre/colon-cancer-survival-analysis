@@ -10,7 +10,7 @@ output:
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
-                      fig.path = here::here("figures", ""), fig.width = 8, fig.height = 6)
+                      fig.path = paste0(here::here("figures"), "/"), fig.width = 8, fig.height = 6)
 ```
 
 ```{r packages}
@@ -147,6 +147,93 @@ ph_test
 ph_global_p <- ph_test$table["GLOBAL", "p"]
 ```
 
+```{r readme_numbers, echo=FALSE}
+cat("=== COUNTS AND EVENTS ===\n")
+cat("Patients (KM analysis):", nrow(df), "\n")
+cat("Deaths:", sum(df$status),
+    sprintf("(%.1f%%)\n", 100 * mean(df$status)))
+ 
+by_arm <- df |>
+  dplyr::group_by(rx) |>
+  dplyr::summarise(n = dplyr::n(), deaths = sum(status), .groups = "drop")
+print(as.data.frame(by_arm))
+ 
+cat("\nComplete cases used by the multivariate model:",
+    stats::nobs(cox_multi), "\n")
+cat("Dropped due to missing covariates:",
+    nrow(df) - stats::nobs(cox_multi), "\n")
+ 
+# Median follow-up: reverse Kaplan-Meier (censoring-reversed estimator)
+rev_km <- survival::survfit(Surv(time, 1 - status) ~ 1, data = df)
+cat(sprintf("Median follow-up: %.2f years\n",
+            summary(rev_km)$table[["median"]] / 365.25))
+ 
+cat("\n=== LOG-RANK TESTS ===\n")
+global_lr <- survival::survdiff(Surv(time, status) ~ rx, data = df)
+cat("Global 3-arm p =",
+    format.pval(1 - pchisq(global_lr$chisq, df = length(global_lr$n) - 1),
+                digits = 3, eps = 1e-4), "\n")
+ 
+for (arm in c("Lev", "Lev+5FU")) {
+  sub <- dplyr::filter(df, rx %in% c("Obs", arm))
+  sub$rx <- droplevels(sub$rx)
+  lr <- survival::survdiff(Surv(time, status) ~ rx, data = sub)
+  cat(sprintf("%s vs Obs: p = %s\n", arm,
+              format.pval(1 - pchisq(lr$chisq, df = 1),
+                          digits = 3, eps = 1e-4)))
+}
+ 
+cat("\n=== COX MULTIVARIATE: HR (95% CI) AND p ===\n")
+s <- summary(cox_multi)
+hr_tbl <- data.frame(
+  term = rownames(s$coefficients),
+  HR   = sprintf("%.2f", s$coefficients[, "exp(coef)"]),
+  CI   = sprintf("[%.2f-%.2f]",
+                 s$conf.int[, "lower .95"], s$conf.int[, "upper .95"]),
+  p    = format.pval(s$coefficients[, "Pr(>|z|)"], digits = 3, eps = 1e-4),
+  row.names = NULL
+)
+print(hr_tbl)
+ 
+cat("\n=== PROPORTIONAL HAZARDS (cox.zph) ===\n")
+print(ph_test)
+cat("\nGlobal p =", format.pval(ph_test$table["GLOBAL", "p"],
+                                digits = 3, eps = 1e-4), "\n")
+violators <- rownames(ph_test$table)[
+  ph_test$table[, "p"] < 0.05 & rownames(ph_test$table) != "GLOBAL"
+]
+if (length(violators)) {
+  cat("Covariates violating PH at alpha = 0.05:",
+      paste(violators, collapse = ", "), "\n")
+  cat("-> Refit stratified on these and compare the rx estimate.\n")
+} else {
+  cat("No covariate violates PH at alpha = 0.05.\n")
+}
+ 
+cat("\n=== ENVIRONMENT ===\n")
+cat("R version:", paste(R.version$major, R.version$minor, sep = "."), "\n")
+cat("\n=== EXTERNAL BENCHMARK ===\n")
+hr_trt <- summary(cox_multi)$conf.int["rxLev+5FU", "exp(coef)"]
+cat(sprintf("Adjusted HR: %.2f -> %.0f%% hazard reduction\n",
+            hr_trt, 100 * (1 - hr_trt)))
+cat("Published (stage C only): 33% reduction in overall death rate\n")
+ 
+if (exists("cox_nodiffer")) {
+  cat("\n=== SENSITIVITY TO LISTWISE DELETION ===\n")
+  hr_sens <- summary(cox_nodiffer)$conf.int["rxLev+5FU", "exp(coef)"]
+  print(data.frame(
+    model = c("With differ (complete cases)", "Without differ (all patients)"),
+    n     = c(cox_multi$n, cox_nodiffer$n),
+    HR    = sprintf("%.3f", c(hr_trt, hr_sens))
+  ))
+  cat(sprintf("Absolute difference in HR: %.3f\n", abs(hr_trt - hr_sens)))
+  cat(if (abs(hr_trt - hr_sens) < 0.05)
+        "-> Estimates agree closely; listwise deletion is not materially biasing.\n"
+      else
+        "-> Estimates differ; discuss this explicitly in the README.\n")
+}
+```
+
 ```{r ph_plot, fig.height=10}
 ggcoxzph(ph_test)
 ```
@@ -164,7 +251,7 @@ compared to observation alone — a `r round(100 * (1 - summary(cox_multi)$conf.
 against the 33% reduction in overall death rate reported for stage C patients
 in the original trial (Moertel et al., 1990).
 
-`r if (ph_global_p >= 0.05) sprintf("The proportional hazards assumption was not rejected (global test p = %s).", format.pval(ph_global_p, digits = 3, eps = 1e-4)) else sprintf("The proportional hazards assumption was rejected globally (p = %s); see the cox.zph output above for the covariates concerned.", format.pval(ph_global_p, digits = 3, eps = 1e-4))`
+`r if (ph_global_p >= 0.05) sprintf("The proportional hazards assumption was not rejected (global test p = %s).", format.pval(ph_global_p, digits = 3, eps = 1e-4)) else sprintf("The proportional hazards assumption was rejected globally (p = %s); see the cox.zph output above for the covariates concerned.", format.pval(ph_global_p, digits = 3, eps = 1e-4))``
 
 ```{r session}
 sessionInfo()
