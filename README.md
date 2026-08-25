@@ -113,7 +113,7 @@ After adjustment for age, sex, bowel obstruction, perforation, adherence to adja
 
 Nodal involvement and depth of invasion emerge as the dominant prognostic determinants, with effect sizes exceeding that of treatment itself — adjuvant therapy modifies the prognosis conferred by baseline stage without overriding it.
 
-**External benchmark.** The adjusted hazard ratio of 0.7 corresponds to a **30  % reduction in the hazard of death**, against the **33 %** reduction in overall death rate reported for stage C patients in the original publication. The agreement is a check on the analysis pipeline rather than a finding in its own right: it indicates that the endpoint definition, the record filtering and the model specification behave as intended. The two figures are not strictly comparable — the published estimate covers stage C patients only, while this dataset is an undocumented subset spanning both stage groups.
+**External benchmark.** The adjusted hazard ratio of 0.70 corresponds to a **30 % reduction in the hazard of death**, against the **33 %** reduction in overall death rate reported for stage C patients in the original publication. The agreement is a check on the analysis pipeline rather than a finding in its own right: it indicates that the endpoint definition, the record filtering and the model specification behave as intended. The two figures are not strictly comparable — the published estimate covers stage C patients only, while this dataset is an undocumented subset spanning both stage groups.
 
 **Sensitivity to listwise deletion.** Refitting the model without `differ`, which retains all 929 patients, gives a treatment estimate of 0.7 against 0.7  for the complete-case model. Difference : 0.006
 
