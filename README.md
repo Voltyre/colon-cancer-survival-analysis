@@ -158,8 +158,6 @@ Stated explicitly, because they bound what this analysis can support.
 
 - The dataset holds **929 of the 1 296 patients** enrolled in the published trial, and the selection rule is not documented in the `survival` package. Comparisons with the published effect estimates are therefore indicative, not confirmatory.
 
-- 
-
 - Missing values in `differ` were handled by **complete-case analysis with a sensitivity check**, not by imputation. Under a missing-at-random assumption, multiple imputation would be the more principled approach; for survival data this requires including the event indicator and the Nelson-Aalen cumulative hazard in the imputation model, failing which the treatment estimate is biased towards the null. This was judged out of scope here and is stated rather than silently omitted.
 
 ## Reproducing the analysis
